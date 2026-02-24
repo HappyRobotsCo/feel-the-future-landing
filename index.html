@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light">
+  <title>Feel the Future | Happy Robots</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #FFFFFF;
+      --bg-subtle: #FAFAFA;
+      --text-primary: #1A1A1A;
+      --text-secondary: #666666;
+      --text-dim: #999999;
+      --accent: #0066CC;
+      --accent-hover: #005F9F;
+      --border: #E5E5E5;
+      --error: #DC2626;
+      --success: #10B981;
+      --radius-sm: 4px;
+      --shadow-subtle: 0px 1px 2px rgba(15, 23, 42, 0.08);
+      --shadow-card: 0px 8px 24px rgba(15, 23, 42, 0.08);
+      --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      --font-heading: Georgia, "Times New Roman", serif;
+    }
+
+    html { font-size: 16px; color-scheme: light; }
+
+    body {
+      background: var(--bg);
+      color: var(--text-secondary);
+      font-family: var(--font-body);
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.7;
+    }
+
+    /* Scrollbar hidden */
+    ::-webkit-scrollbar { display: none; }
+    html { scrollbar-width: none; -ms-overflow-style: none; }
+
+    /* Layout */
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    section {
+      padding: 4rem 0;
+    }
+
+    section.subtle {
+      background: var(--bg-subtle);
+    }
+
+    section.contrast {
+      background: var(--text-primary);
+      color: #FFFFFF;
+    }
+
+    section.contrast .text-secondary { color: rgba(255,255,255,0.65); }
+    section.contrast .text-dim { color: rgba(255,255,255,0.4); }
+
+    /* Logo */
+    .logo-bar {
+      padding: 2rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .logo-bar svg {
+      height: 16px;
+      width: auto;
+    }
+
+    /* Typography */
+    h1 {
+      font-family: var(--font-heading);
+      font-size: 3.5rem;
+      font-weight: 300;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      color: var(--text-primary);
+    }
+
+    h2 {
+      font-family: var(--font-heading);
+      font-size: 2rem;
+      font-weight: 300;
+      letter-spacing: -0.01em;
+      line-height: 1.35;
+      color: var(--text-primary);
+    }
+
+    h3 {
+      font-family: var(--font-body);
+      font-size: 1.25rem;
+      font-weight: 400;
+      line-height: 1.4;
+      color: var(--text-primary);
+    }
+
+    .eyebrow {
+      font-size: 0.8125rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+      margin-bottom: 1rem;
+    }
+
+    .body-lg {
+      font-size: 1.125rem;
+      line-height: 1.7;
+    }
+
+    .body-sm {
+      font-size: 0.875rem;
+      line-height: 1.6;
+    }
+
+    .caption {
+      font-size: 0.8125rem;
+      line-height: 1.4;
+      letter-spacing: 0.01em;
+      color: var(--text-dim);
+    }
+
+    /* Hero */
+    .hero {
+      padding: 6rem 0 4rem;
+    }
+
+    .hero h1 {
+      margin-bottom: 1.5rem;
+    }
+
+    .hero .body-lg {
+      margin-bottom: 2rem;
+    }
+
+    /* Cards */
+    .card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 2rem;
+      margin-bottom: 1.5rem;
+      transition: all 200ms ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: var(--radius-sm);
+      padding: 1px;
+      background: linear-gradient(135deg, var(--border), var(--text-primary), var(--border));
+      background-size: 300% 300%;
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
+    .card:hover::before {
+      opacity: 1;
+      animation: gradientShift 4s linear infinite;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .card .eyebrow { margin-bottom: 0.5rem; }
+    .card h3 { margin-bottom: 0.5rem; }
+    .card p { color: var(--text-secondary); }
+
+    .card-accent-green { border-top: 3px solid var(--success); }
+    .card-accent-blue { border-top: 3px solid var(--accent); }
+    .card-accent-amber { border-top: 3px solid #F59E0B; }
+
+    /* Steps */
+    .step {
+      display: flex;
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .step-number {
+      flex-shrink: 0;
+      width: 2rem;
+      height: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    .step-content h3 { margin-bottom: 0.25rem; }
+
+    /* Code block */
+    .code-block {
+      background: var(--text-primary);
+      border-radius: var(--radius-sm);
+      padding: 1rem 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin: 1.5rem 0;
+    }
+
+    .code-block code {
+      flex: 1;
+      font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+      font-size: 0.8125rem;
+      color: #FFFFFF;
+      word-break: break-all;
+      line-height: 1.6;
+    }
+
+    .btn-copy {
+      flex-shrink: 0;
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.3);
+      color: rgba(255,255,255,0.7);
+      border-radius: var(--radius-sm);
+      padding: 0.35rem 0.75rem;
+      font-family: var(--font-body);
+      font-size: 0.8125rem;
+      cursor: pointer;
+      transition: all 200ms ease;
+    }
+
+    .btn-copy:hover {
+      color: #FFFFFF;
+      border-color: rgba(255,255,255,0.6);
+    }
+
+    /* Terminal screenshot hint */
+    .terminal-hint {
+      background: var(--bg-subtle);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 1.25rem 1.5rem;
+      margin: 1rem 0;
+    }
+
+    .terminal-hint kbd {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 0.1rem 0.4rem;
+      font-size: 0.8125rem;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      color: var(--text-primary);
+    }
+
+    /* Waiver */
+    .waiver-box {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 2rem;
+    }
+
+    .waiver-box h3 { margin-bottom: 1rem; }
+
+    .waiver-text {
+      font-size: 0.8125rem;
+      line-height: 1.7;
+      color: var(--text-secondary);
+      max-height: 200px;
+      overflow-y: auto;
+      padding-right: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .checkbox-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .checkbox-row input[type="checkbox"] {
+      margin-top: 0.2rem;
+      accent-color: var(--accent);
+      width: 16px;
+      height: 16px;
+    }
+
+    .checkbox-row label {
+      font-size: 0.875rem;
+      color: var(--text-primary);
+      cursor: pointer;
+    }
+
+    /* Name input */
+    .name-input {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 0.625rem 0.75rem;
+      font-family: var(--font-body);
+      font-size: 0.875rem;
+      color: var(--text-primary);
+      outline: none;
+      transition: all 200ms ease;
+      margin-bottom: 1.5rem;
+    }
+
+    .name-input:focus {
+      border-color: var(--accent);
+      background: rgba(0, 102, 204, 0.03);
+    }
+
+    .name-label {
+      display: block;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 0.5rem;
+    }
+
+    /* Buttons */
+    .btn-primary {
+      display: inline-block;
+      background: var(--accent);
+      color: #FFFFFF;
+      border: none;
+      border-radius: var(--radius-sm);
+      padding: 0.75rem 1.5rem;
+      font-family: var(--font-body);
+      font-size: 0.875rem;
+      font-weight: 400;
+      cursor: pointer;
+      transition: all 300ms ease;
+      position: relative;
+      overflow: hidden;
+      text-decoration: none;
+      width: 100%;
+      text-align: center;
+    }
+
+    .btn-primary::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0.15);
+      transform: translateX(-101%);
+      transition: transform 300ms ease;
+    }
+
+    .btn-primary:hover::after { transform: translateX(0); }
+    .btn-primary:hover { background: var(--accent-hover); transform: translateY(-1px); }
+
+    .btn-primary:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-primary:disabled::after { display: none; }
+
+    /* Signature success */
+    .signature-success {
+      display: none;
+      text-align: center;
+      padding: 1rem;
+    }
+
+    .signature-success.visible {
+      display: block;
+    }
+
+    .signature-success p {
+      color: var(--success);
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
+
+    /* Divider */
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 0;
+    }
+
+    /* Footer */
+    footer {
+      padding: 3rem 0;
+      text-align: center;
+    }
+
+    footer p {
+      font-size: 0.8125rem;
+      color: var(--text-dim);
+    }
+
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+      background-image: linear-gradient(var(--accent), var(--accent));
+      background-size: 0% 1px;
+      background-position: left bottom;
+      background-repeat: no-repeat;
+      transition: background-size 300ms ease;
+    }
+
+    footer a:hover {
+      background-size: 100% 1px;
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      h1 { font-size: 2.5rem; }
+      h2 { font-size: 1.75rem; }
+      .hero { padding: 4rem 0 3rem; }
+      section { padding: 3rem 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Logo Bar -->
+  <div class="logo-bar">
+    <div class="container">
+      <svg viewBox="0 0 293.8 19.37" xmlns="http://www.w3.org/2000/svg" aria-label="Happy Robots">
+        <path fill="#1A1A1A" d="M164.52,13.09h-5.26v6.12h-3.92V0h13.09v3.06h3.06v6.97h-3.06v5.26h3.06v3.92h-3.92v-3.06h-3.06v-3.06ZM159.26,9.18h8.32V3.92h-8.32v5.26ZM192.9,0v3.06h3.06v13.09h-3.06v3.06h-10.03v-3.06h-3.06V3.06h3.06V0h10.03ZM192.04,3.92h-8.32v11.38h8.32V3.92ZM220.42,6.97h-3.06v2.2h3.06v6.97h-3.06v3.06h-13.09V0h13.09v3.06h3.06v3.92ZM208.18,6.12h8.32v-2.2h-8.32v2.2ZM208.18,15.3h8.32v-5.26h-8.32v5.26ZM241.82,0v3.06h3.06v13.09h-3.06v3.06h-10.03v-3.06h-3.06V3.06h3.06V0h10.03ZM240.96,3.92h-8.32v11.38h8.32V3.92ZM269.34,3.92h-6.12v15.3h-3.92V3.92h-6.12V0h16.15v3.92ZM293.8,3.92h-12.24v2.2h6.12v3.06h3.06v3.06h3.06v3.92h-3.06v3.06h-13.09v-3.92h12.24v-2.2h-6.12v-3.06h-3.06v-3.06h-3.06v-3.92h3.06V0h13.09v3.92Z"/>
+        <path fill="#1A1A1A" d="M12.24,10.03H3.92v9.18H0V0h3.92v6.12h8.32V0h3.92v19.21h-3.92v-9.18ZM36.7,13.09h-8.32v6.12h-3.92V3.06h3.06V0h10.03v3.06h3.06v16.15h-3.92v-6.12ZM36.7,9.18V3.92h-8.32v5.26h8.32ZM62.01,13.09h-9.18v6.12h-3.92V0h13.09v3.06h3.06v6.97h-3.06v3.06ZM52.84,9.18h8.32V3.92h-8.32v5.26ZM86.47,13.09h-9.18v6.12h-3.92V0h13.09v3.06h3.06v6.97h-3.06v3.06ZM77.3,9.18h8.32V3.92h-8.32v5.26ZM110.93,10.03h-3.06v9.18h-3.92v-9.18h-3.06v-3.06h-3.06V0h3.92v6.12h3.06v3.06h2.2v-3.06h3.06V0h3.92v6.97h-3.06v3.06Z"/>
+        <path fill="#FF5858" d="M126.16.93v.88h-1.78v1.76h-1.78v5.27h1.78v1.76h1.78v1.76h1.78v1.76h1.78v1.76h1.78v1.76h1.78v1.76h2.67v-1.76h1.78v-1.76h1.78v-1.76h1.78v-1.76h1.78v-1.76h1.78v-1.76h1.78V3.57h-1.78v-1.76h-1.78V.05h-5.33v1.76h-1.78v1.76h-2.67v-1.76h-1.78V.05h-5.33v.88ZM127.94,3.57v.88h-1.78v1.76h1.78v-1.76h1.78v-1.76h-1.78v.88Z"/>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <p class="eyebrow">A Live Demo Experience</p>
+      <h1>Feel the Future</h1>
+      <p class="body-lg">Three AI agents will work on your real data simultaneously. One builds you a website. One triages your email. One organizes your files. All in about 15 minutes, right on your Mac.</p>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- What Happens -->
+  <section>
+    <div class="container">
+      <p class="eyebrow">What will happen</p>
+      <h2>Three agents, three missions</h2>
+      <p class="body-lg" style="margin-bottom: 2rem;">Once you run the setup command, a dashboard opens in your browser. You enter your LinkedIn URL, click Launch, and watch three AI agents go to work.</p>
+
+      <div class="card card-accent-green">
+        <p class="eyebrow" style="color: var(--success);">Mission 01</p>
+        <h3>Research & Build</h3>
+        <p>An AI agent researches your LinkedIn profile and builds you a personal website from scratch. You'll see it write real code with your name, your career, your skills.</p>
+      </div>
+
+      <div class="card card-accent-blue">
+        <p class="eyebrow" style="color: var(--accent);">Mission 02</p>
+        <h3>Email Triage</h3>
+        <p>An AI agent reads your recent Gmail messages, categorizes them by urgency, and drafts replies for the important ones. Read-only — nothing is ever sent.</p>
+      </div>
+
+      <div class="card card-accent-amber">
+        <p class="eyebrow" style="color: #F59E0B;">Mission 03</p>
+        <h3>Organize Documents</h3>
+        <p>An AI agent scans a folder on your Mac, intelligently sorts your files into categories, and generates an undo script so everything is fully reversible.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Waiver -->
+  <section class="subtle" id="waiver-section">
+    <div class="container">
+      <div class="waiver-box">
+        <p class="eyebrow">Before we start</p>
+        <h3>Acknowledgment & Release</h3>
+
+        <div class="waiver-text">
+          <p>By proceeding with the "Feel the Future" demo experience provided by Happy Robots Co. ("Company"), I acknowledge and agree to the following:</p>
+          <br>
+          <p><strong>1. Nature of the Demo.</strong> This is a live demonstration of AI agent capabilities using Claude Code by Anthropic. Three AI agents will operate simultaneously on my computer, performing the following actions: (a) researching my public LinkedIn profile and generating a personal website, (b) reading my recent Gmail messages in read-only mode to categorize and draft replies, and (c) reorganizing files within a folder I designate on my Mac.</p>
+          <br>
+          <p><strong>2. Local Processing.</strong> All processing occurs locally on my machine. No data is transmitted to Happy Robots Co. servers. AI agent interactions are subject to Anthropic's usage policies and terms of service.</p>
+          <br>
+          <p><strong>3. Data Access.</strong> I understand the demo will access: my public LinkedIn profile data, my Gmail inbox (read-only — no emails will be sent, forwarded, or deleted), and files within a folder I specify on my computer. I consent to this access for the duration of the demo session.</p>
+          <br>
+          <p><strong>4. Reversibility.</strong> File organization changes include an automatically generated undo script. I understand that while the Company has designed these operations to be reversible, I should back up important files before proceeding.</p>
+          <br>
+          <p><strong>5. Software Installation.</strong> The setup process may install the following on my machine: Homebrew (macOS package manager), Node.js, and Claude Code CLI. These are standard developer tools that can be uninstalled at any time.</p>
+          <br>
+          <p><strong>6. Assumption of Risk.</strong> I understand this is a demonstration of emerging AI technology. While the Company has taken reasonable precautions, AI agents may produce unexpected results. I proceed at my own risk.</p>
+          <br>
+          <p><strong>7. Release of Liability.</strong> To the fullest extent permitted by law, I release Happy Robots Co., its officers, employees, and agents from any and all claims, damages, losses, or expenses arising from or related to my participation in this demo, including but not limited to: data loss, file corruption, unintended email access, software conflicts, or any other consequences of running AI agents on my computer.</p>
+          <br>
+          <p><strong>8. No Warranty.</strong> This demo is provided "as is" without warranty of any kind, express or implied. The Company makes no guarantees regarding the accuracy, reliability, or completeness of AI-generated outputs.</p>
+        </div>
+
+        <label class="name-label" for="signer-name">Full Name</label>
+        <input type="text" id="signer-name" class="name-input" placeholder="Your full name">
+
+        <div class="checkbox-row">
+          <input type="checkbox" id="waiver-agree">
+          <label for="waiver-agree">I have read and agree to the above terms. I understand that AI agents will access my data as described.</label>
+        </div>
+
+        <button class="btn-primary" id="sign-btn" disabled>Sign & Continue</button>
+
+        <div class="signature-success" id="signature-success">
+          <p>Signed — you're all set.</p>
+          <span class="caption" id="signature-timestamp"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- Setup Instructions -->
+  <section id="setup-section" style="opacity: 0.3; pointer-events: none; transition: all 400ms ease;">
+    <div class="container">
+      <p class="eyebrow">Get started</p>
+      <h2>Run one command</h2>
+      <p class="body-lg" style="margin-bottom: 2.5rem;">The setup takes about 60 seconds. It installs everything you need, opens a dashboard in your browser, and you're ready to launch.</p>
+
+      <div class="step">
+        <div class="step-number">1</div>
+        <div class="step-content">
+          <h3>Open Terminal</h3>
+          <div class="terminal-hint">
+            <p class="body-sm">Press <kbd>Cmd</kbd> + <kbd>Space</kbd> to open Spotlight, type <strong>Terminal</strong>, and hit Enter.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">2</div>
+        <div class="step-content">
+          <h3>Paste this command and hit Enter</h3>
+          <div class="code-block">
+            <code id="setup-command">curl -sL https://raw.githubusercontent.com/HappyRobotsCo/feel-the-agi-app/main/setup.sh | bash</code>
+            <button class="btn-copy" id="copy-btn">Copy</button>
+          </div>
+          <p class="caption">The script will walk you through each step with friendly progress messages.</p>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">3</div>
+        <div class="step-content">
+          <h3>Follow the prompts</h3>
+          <p class="body-sm" style="color: var(--text-secondary);">You'll sign in to your Anthropic account and connect your Gmail. The dashboard opens automatically when setup is complete. Enter your LinkedIn URL, click Launch, and watch the future unfold.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <div class="divider"></div>
+  <footer>
+    <div class="container">
+      <p>Happy Robots Co. &mdash; Train for Trust, Measure for Scale</p>
+      <p style="margin-top: 0.5rem;"><a href="https://happyrobots.co">happyrobots.co</a></p>
+    </div>
+  </footer>
+
+  <script>
+    (function() {
+      var nameInput = document.getElementById('signer-name');
+      var checkbox = document.getElementById('waiver-agree');
+      var signBtn = document.getElementById('sign-btn');
+      var successEl = document.getElementById('signature-success');
+      var timestampEl = document.getElementById('signature-timestamp');
+      var setupSection = document.getElementById('setup-section');
+      var copyBtn = document.getElementById('copy-btn');
+      var command = document.getElementById('setup-command');
+
+      function updateSignBtn() {
+        signBtn.disabled = !(nameInput.value.trim().length >= 2 && checkbox.checked);
+      }
+
+      nameInput.addEventListener('input', updateSignBtn);
+      checkbox.addEventListener('change', updateSignBtn);
+
+      signBtn.addEventListener('click', function() {
+        if (signBtn.disabled) return;
+        var now = new Date();
+        var ts = now.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+          + ' at ' + now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+
+        signBtn.style.display = 'none';
+        nameInput.disabled = true;
+        checkbox.disabled = true;
+        successEl.classList.add('visible');
+        timestampEl.textContent = 'Signed by ' + nameInput.value.trim() + ' on ' + ts;
+
+        // Unlock setup section
+        setupSection.style.opacity = '1';
+        setupSection.style.pointerEvents = 'auto';
+
+        // Scroll to setup
+        setTimeout(function() {
+          setupSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 500);
+      });
+
+      // Copy button
+      if (copyBtn && command) {
+        copyBtn.addEventListener('click', function() {
+          navigator.clipboard.writeText(command.textContent).then(function() {
+            copyBtn.textContent = 'Copied!';
+            setTimeout(function() { copyBtn.textContent = 'Copy'; }, 2000);
+          });
+        });
+      }
+    })();
+  </script>
+
+</body>
+</html>
