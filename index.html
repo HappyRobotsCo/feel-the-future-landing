@@ -532,6 +532,47 @@
 
   <div class="divider"></div>
 
+  <!-- Before You Begin -->
+  <section id="prereqs-section" style="opacity: 0.3; pointer-events: none; transition: all 400ms ease;">
+    <div class="container">
+      <p class="eyebrow">Before you begin</p>
+      <h2>Two things to set up first</h2>
+      <p class="body-lg" style="margin-bottom: 2.5rem;">This takes about 5 minutes. You'll need a Claude account and a Gmail connection.</p>
+
+      <div class="step">
+        <div class="step-number">1</div>
+        <div class="step-content">
+          <h3>Get a Claude plan that includes Claude Code</h3>
+          <p class="body-sm" style="color: var(--text-secondary); margin-bottom: 0.75rem;">The demo runs on Claude Code, which requires a <strong>paid Claude plan</strong>. The free plan does not include it.</p>
+          <div class="terminal-hint">
+            <p class="body-sm" style="margin-bottom: 0.5rem;"><strong>How to sign up:</strong></p>
+            <p class="body-sm">1. Go to <a href="https://claude.ai" target="_blank" rel="noopener" style="color: var(--accent);">claude.ai</a> and sign in (or create an account)</p>
+            <p class="body-sm">2. Click your name in the bottom-left, then <strong>Settings &rarr; Billing</strong></p>
+            <p class="body-sm">3. Choose a plan &mdash; <strong>Pro ($20/mo)</strong> is all you need</p>
+            <p class="caption" style="margin-top: 0.75rem;">Already have Pro, Max, Team, or Enterprise? You're good &mdash; skip to step 2.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">2</div>
+        <div class="step-content">
+          <h3>Connect your Gmail to Claude</h3>
+          <p class="body-sm" style="color: var(--text-secondary); margin-bottom: 0.75rem;">The Email Triage agent needs to read your inbox. You'll connect it through Claude's built-in connectors &mdash; takes about 30 seconds.</p>
+          <div class="terminal-hint">
+            <p class="body-sm" style="margin-bottom: 0.5rem;"><strong>How to connect:</strong></p>
+            <p class="body-sm">1. Go to <a href="https://claude.ai/settings/connectors" target="_blank" rel="noopener" style="color: var(--accent);">claude.ai/settings/connectors</a></p>
+            <p class="body-sm">2. Find <strong>Gmail</strong> in the list and click <strong>Connect</strong></p>
+            <p class="body-sm">3. Sign in with your Google account and click <strong>Authorize</strong></p>
+            <p class="caption" style="margin-top: 0.75rem;">Gmail will show as "Connected" when ready. Claude can only <em>read</em> your emails &mdash; it cannot send, delete, or modify anything.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
   <!-- Setup Instructions -->
   <section id="setup-section" style="opacity: 0.3; pointer-events: none; transition: all 400ms ease;">
     <div class="container">
@@ -587,6 +628,7 @@
       var signBtn = document.getElementById('sign-btn');
       var successEl = document.getElementById('signature-success');
       var timestampEl = document.getElementById('signature-timestamp');
+      var prereqsSection = document.getElementById('prereqs-section');
       var setupSection = document.getElementById('setup-section');
       var copyBtn = document.getElementById('copy-btn');
       var command = document.getElementById('setup-command');
@@ -610,13 +652,15 @@
         successEl.classList.add('visible');
         timestampEl.textContent = 'Signed by ' + nameInput.value.trim() + ' on ' + ts;
 
-        // Unlock setup section
+        // Unlock prereqs and setup sections
+        prereqsSection.style.opacity = '1';
+        prereqsSection.style.pointerEvents = 'auto';
         setupSection.style.opacity = '1';
         setupSection.style.pointerEvents = 'auto';
 
-        // Scroll to setup
+        // Scroll to prereqs
         setTimeout(function() {
-          setupSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          prereqsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }, 500);
       });
 
